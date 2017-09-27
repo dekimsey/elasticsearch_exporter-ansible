@@ -1,0 +1,11 @@
+---
+
+- name: Install Prometheus ElasticSearch Exporter
+  include: build.yml
+  tags:
+    - build
+
+- name: Configure Prometheus ElasticSearch Exporter
+  include: configure.yml
+  tags:
+    - configure
