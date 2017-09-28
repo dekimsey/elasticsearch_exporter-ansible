@@ -1,0 +1,8 @@
+---
+
+- name: Prometheus ElasticSearch Exporter service start
+  become: yes
+  service:
+    name: prometheus-elasticsearch-exporter
+    state: started
+  when: prometheus_elasticsearch_exporter.start_on_boot
