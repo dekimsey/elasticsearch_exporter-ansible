@@ -1,5 +1,10 @@
 ---
 
+- name: Create dedicated Prometheus ElasticSearch Exporter user
+  include: user_creation.yml
+  tags:
+    - build
+
 - name: Install Prometheus ElasticSearch Exporter
   include: build.yml
   tags:

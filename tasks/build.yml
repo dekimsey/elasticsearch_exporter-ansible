@@ -1,72 +1,66 @@
 ---
 
 - name: Create Prometheus ElasticSearch Exporter directories
-  become: yes
   file:
     path: "{{ item }}"
     state: directory
-    owner: "{{ prometheus_elasticsearch_exporter.user }}"
-    group: "{{ prometheus_elasticsearch_exporter.group }}"
+    owner: "{{ elasticsearch_exporter_user }}"
+    group: "{{ elasticsearch_exporter_group }}"
     mode: 0750
   with_items:
-    - "{{ prometheus_elasticsearch_exporter.path.install }}"
-    - "{{ prometheus_elasticsearch_exporter.path.install }}/bin"
-    - "{{ prometheus_elasticsearch_exporter.path.log }}"
-
-- name: Copy wrapper shell script
-  become: yes
-  copy:
-    src: prometheus_wrapper
-    dest: "{{ prometheus_elasticsearch_exporter.path.install }}/bin/prometheus_wrapper"
-    owner: "{{ prometheus_elasticsearch_exporter.user }}"
-    group: "{{ prometheus_elasticsearch_exporter.group }}"
-    mode: 0755
+    - "{{ elasticsearch_exporter_install_path }}"
+    - "{{ elasticsearch_exporter_install_path }}/bin"
+    - "{{ elasticsearch_exporter_log_path }}"
 
 - name: stat downloaded exporter tar
   stat:
-    path: "{{ prometheus_elasticsearch_exporter.download_dest }}/{{ prometheus_elasticsearch_exporter.download_url.split('/')[-1] }}"
+    path: "{{ elasticsearch_exporter_download_dest }}/{{ elasticsearch_exporter_download_url.split('/')[-1] }}"
   register: download_tar
 
 - name: Download Prometheus ElasticSearch Exporter tarball
-  become: yes
   get_url:
-    url: "{{ prometheus_elasticsearch_exporter.download_url }}"
-    dest: "{{ prometheus_elasticsearch_exporter.download_dest }}"
-    checksum: "{{ prometheus_elasticsearch_exporter.checksum }}"
+    url: "{{ elasticsearch_exporter_download_url }}"
+    dest: "{{ elasticsearch_exporter_download_dest }}"
+    checksum: "{{ elasticsearch_exporter_checksum }}"
   when: download_tar.stat.exists == False
 
 - name: Untar Prometheus ElasticSearch Exporter tarball
-  become: yes
   unarchive:
-    src: "{{ prometheus_elasticsearch_exporter.download_dest }}/{{ prometheus_elasticsearch_exporter.download_url.split('/')[-1] }}"
-    dest: "{{ prometheus_elasticsearch_exporter.path.install }}"
-    owner: "{{ prometheus_elasticsearch_exporter.user }}"
-    group: "{{ prometheus_elasticsearch_exporter.user }}"
+    src: "{{ elasticsearch_exporter_download_dest }}/{{ elasticsearch_exporter_download_url.split('/')[-1] }}"
+    dest: "{{ elasticsearch_exporter_install_path }}"
+    owner: "{{ elasticsearch_exporter_user }}"
+    group: "{{ elasticsearch_exporter_user }}"
     remote_src: True
   when: download_tar.stat.exists == False
 
 - name: Ensure Prometheus ElasticSearch Exporter directory does not exist
-  become: yes
   file:
-    path: "{{ prometheus_elasticsearch_exporter.path.install }}/prometheus_elasticsearch_exporter/"
+    path: "{{ elasticsearch_exporter_install_path }}/prometheus_elasticsearch_exporter/"
     state: absent
   when: download_tar.stat.exists == False
 
 - name: Move Prometheus ElasticSearch Exporter directory to destination
   become: yes
-  become_user: "{{ prometheus_elasticsearch_exporter.user }}"
-  command: "mv {{ prometheus_elasticsearch_exporter.path.install }}/{{ prometheus_elasticsearch_exporter.download_url.split('/')[-1].rsplit('.',2)[0] }} {{ prometheus_elasticsearch_exporter.path.install }}/prometheus_elasticsearch_exporter"
+  become_user: "{{ elasticsearch_exporter_user }}"
+  command: "mv {{ elasticsearch_exporter_install_path }}/{{ elasticsearch_exporter_download_url.split('/')[-1].rsplit('.',2)[0] }} {{ elasticsearch_exporter_install_path }}/prometheus_elasticsearch_exporter"
   when: download_tar.stat.exists == False
 
-- name: Make Prometheus ElasticSearch Exporter a service
-  become: yes
+- name: Add elasticsearch_exporter default file
   template:
-    dest: /etc/init.d/prometheus-elasticsearch-exporter
+    src: "elasticsearch_exporter.default.j2"
+    dest: "/etc/default/elasticsearch_exporter"
+  notify: "restart exporter"
+
+- name: Add systemd service
+  template:
+    dest: /etc/systemd/system/elasticsearch-exporter.service
     mode: 0775
-    src: prometheus_elasticsearch_exporter.sysvinit.j2
+    src: elasticsearch_exporter.service.j2
+  notify: "restart exporter"
 
 - name: Enable Prometheus ElasticSearch Exporter service
-  become: yes
-  service:
-    name: prometheus-elasticsearch-exporter
-    enabled: "{{ prometheus_elasticsearch_exporter.start_on_boot }}"
+  systemd:
+    name: elasticsearch-exporter
+    state: "{{ elasticsearch_exporter_svc_state }}"
+    enabled: "{{ elasticsearch_exporter_start_on_boot }}"
+    daemon_reload: yes

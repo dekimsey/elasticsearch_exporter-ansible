@@ -4,7 +4,7 @@ ANSIBLE_INSTALL_VERSION ?= 2.2.3.0
 ANSIBLE_CONFIG ?= tests/ansible.cfg
 ROLE_NAME ?= $(shell basename $$(pwd))
 TEST_PLAYBOOK ?= test.yml
-VAGRANT_BOX ?= ubuntu/trusty64
+VAGRANT_BOX ?= ubuntu/xenial64
 PATH := $(PWD)/.venv_$(ANSIBLE_INSTALL_VERSION)/bin:$(shell printenv PATH)
 SHELL := env PATH=$(PATH) /bin/bash
 
@@ -33,7 +33,7 @@ test_deps: .venv_$(ANSIBLE_INSTALL_VERSION) tests/roles
 
 tests/roles:
 	mkdir -p tests/roles
-	ln -s ../.. tests/roles/sansible.$(ROLE_NAME)
+	ln -s ../.. tests/roles/$(ROLE_NAME)
 	ansible-galaxy install -p tests/roles -r tests/local_requirements.yml --ignore-errors
 
 ## ! Executes Ansible tests using local connection

@@ -1,12 +1,8 @@
-# prometheus_elasticsearch_exporter
+# elasticsearch_exporter Ansible role
 
-Master: [![Build Status](https://travis-ci.org/sansible/prometheus_elasticsearch_exporter.svg?branch=master)](https://travis-ci.org/sansible/prometheus_elasticsearch_exporter)  
-Develop: [![Build Status](https://travis-ci.org/sansible/prometheus_elasticsearch_exporter.svg?branch=develop)](https://travis-ci.org/sansible/prometheus_elasticsearch_exporter)
-
-* [ansible.cfg](#ansible-cfg)
-* [Installation and Dependencies](#installation-and-dependencies)
-* [Tags](#tags)
-* [Examples](#examples)
+- [elasticsearch_exporter Ansible role](#elasticsearchexporter-ansible-role)
+  - [Variables](#variables)
+  - [Examples](#examples)
 
 This roles installs Prometheus ElasticSearch Exporter.
 
@@ -18,42 +14,21 @@ For more information about Prometheus ElasticSearch Exporter please visit
 For more information about Prometheus Server please visit
 [https://prometheus.io](https://prometheus.io).
 
-
-## ansible.cfg
-
-This role is designed to work with merge "hash_behaviour". Make sure your
-ansible.cfg contains these settings
-
-```INI
-[defaults]
-hash_behaviour = merge
-```
-
-
-
-## Installation and Dependencies
-
-This role will install `sansible.users_and_groups` for managing `prometheus_elasticsearch_exporter` user.
-
-To install run `ansible-galaxy install sansible.prometheus_elasticsearch_exporter` or add this to your
-`roles.yml`.
-
 ```YAML
-- name: sansible.prometheus_elasticsearch_exporter
-  version: v1.0
+- name: stuart.elasticsearch_exporter
+  version: 1.0.0
 ```
 
-and run `ansible-galaxy install -p ./roles -r roles.yml`
+and run `ansible-galaxy install -p ./roles -r requirements.yml`
 
+## Variables
 
+Please have a look at [defaults/main.yml](defaults/main.yml) and [vars/main.yml](vars/main.yml) to know which parameter you can customize.
 
-
-## Tags
-
-This role uses tags: **build** and **configure**
-
-* `build` - Installs Prometheus ElasticSearch Exporter and all it's dependencies.
-* `configure` - Configures Prometheus ElasticSearch Exporter.
+A special note about `elasticsearch_exporter_opts`. This dictionary contains the options that will be used to run the elasticsearch_exporter
+and you can find [all the configuration parameters](https://github.com/justwatchcom/elasticsearch_exporter#configuration) in the exporter documentation.
+Keep in mind that since it's a dictionary you will need to rewrite it completely if you want to customize one parameter,
+or you should enabled variables merging in `ansible.cfg`
 
 
 ## Examples
@@ -68,7 +43,7 @@ Default exporter port: 9108
   hosts: "somehost"
 
   roles:
-    - role: sansible.prometheus_elasticsearch_exporter
+    - role: stuart.elasticsearch_exporter
 ```
 
 ```YAML
@@ -76,7 +51,6 @@ Default exporter port: 9108
   hosts: "somehost"
 
   roles:
-    - role: sansible.prometheus_elasticsearch_exporter
-      prometheus_elasticsearch_exporter:
-        start_on_boot: yes
+    - role: stuart.elasticsearch_exporter
+      elasticsearch_exporter_start_on_boot: yes
 ```

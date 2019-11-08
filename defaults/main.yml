@@ -1,14 +1,10 @@
 ---
-
-prometheus_elasticsearch_exporter:
-  checksum: sha256:907e5f8680665c6da432bf4c398148743911de2f6533d609476aed0e423cb855
-  download_dest: "/tmp"
-  download_url: "https://github.com/justwatchcom/elasticsearch_exporter/releases/download/v1.0.1/elasticsearch_exporter-1.0.1.linux-amd64.tar.gz"
-  group: prometheus
-  opts: ~
-  path:
-    install: /home/prometheus
-    log: /var/log/prometheus
-    pid: /var/run/prometheus
-  start_on_boot: no
-  user: prometheus
+elasticsearch_exporter_checksum: sha256:1d2444d7cbf321cb31d58d2fecc08c8bc90bbcec581f8a1ddb987f9ef425482b
+elasticsearch_exporter_user: prometheus
+elasticsearch_exporter_group: prometheus
+# for more options,
+elasticsearch_exporter_opts:
+  "es.uri": "http://localhost:9200"
+  "web.listen-address": ":9114"
+elasticsearch_exporter_start_on_boot: yes
+elasticsearch_exporter_version: "1.1.0"
