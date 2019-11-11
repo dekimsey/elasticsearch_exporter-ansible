@@ -2,7 +2,7 @@
 Description=Prometheus Exporter for ElasticSearch
 Documentation=https://github.com/justwatchcom/elasticsearch_exporter/README.md
 After=elasticsearch.service network.target
-Requires=elasticsearch.service
+Wants=elasticsearch.service
 
 [Install]
 WantedBy=multi-user.target

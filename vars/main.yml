@@ -3,6 +3,5 @@ elasticsearch_exporter_download_url: "https://github.com/justwatchcom/elasticsea
 elasticsearch_exporter_download_dest: "/tmp"
 elasticsearch_exporter_install_path: "/opt"
 elasticsearch_exporter_log_path: "/var/log/elasticsarch_exporter"
-elasticsearch_exporter_pid_path: "/var/run/elasticsearch_exporter.pid"
 elasticsearch_exporter_platform: "linux-amd64"
 elasticsearch_exporter_svc_state: started
