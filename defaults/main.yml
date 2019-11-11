@@ -8,3 +8,4 @@ elasticsearch_exporter_opts:
   "web.listen-address": ":9114"
 elasticsearch_exporter_start_on_boot: yes
 elasticsearch_exporter_version: "1.1.0"
+elasticsearch_exporter_svc_state: started

@@ -3,3 +3,4 @@
   service:
     name: "elasticsearch-exporter"
     state: restarted
+  when: elasticsearch_exporter_svc_state == 'started'

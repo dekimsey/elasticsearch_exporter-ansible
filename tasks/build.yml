@@ -57,10 +57,3 @@
     mode: 0775
     src: elasticsearch_exporter.service.j2
   notify: "restart exporter"
-
-- name: Enable Prometheus ElasticSearch Exporter service
-  systemd:
-    name: elasticsearch-exporter
-    state: "{{ elasticsearch_exporter_svc_state }}"
-    enabled: "{{ elasticsearch_exporter_start_on_boot }}"
-    daemon_reload: yes
