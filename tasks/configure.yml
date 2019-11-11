@@ -1,8 +1,7 @@
 ---
-
-- name: Prometheus ElasticSearch Exporter service start
-  become: yes
-  service:
-    name: prometheus-elasticsearch-exporter
-    state: started
-  when: prometheus_elasticsearch_exporter.start_on_boot
+- name: Enable Prometheus ElasticSearch Exporter service
+  systemd:
+    name: elasticsearch-exporter
+    state: "{{ elasticsearch_exporter_svc_state }}"
+    enabled: "{{ elasticsearch_exporter_start_on_boot }}"
+    daemon_reload: yes
