@@ -16,7 +16,7 @@ For more information about Prometheus Server please visit
 
 ```YAML
 - name: stuart.elasticsearch_exporter
-  version: 1.0.0
+  version: 2.0.0
 ```
 
 and run `ansible-galaxy install -p ./roles -r requirements.yml`
