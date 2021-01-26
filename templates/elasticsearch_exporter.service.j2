@@ -10,7 +10,7 @@ WantedBy=multi-user.target
 [Service]
 Type=simple
 Restart=always
-ExecStart={{elasticsearch_exporter_install_path}}/prometheus_elasticsearch_exporter/elasticsearch_exporter
+ExecStart={{elasticsearch_exporter_install_path}}/elasticsearch_exporter
 EnvironmentFile=-/etc/default/elasticsearch_exporter
 User={{elasticsearch_exporter_user}}
 Group={{elasticsearch_exporter_group}}

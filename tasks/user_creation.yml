@@ -7,5 +7,6 @@
 - name: Add the elasticsearch exporter user
   user:
     name: "{{elasticsearch_exporter_user}}"
-    shell: /bin/false
+    shell: /sbin/nologin
+    create_home: false
     group: "{{elasticsearch_exporter_group}}"
